@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.cluster import KMeans
-from backend.services.prediction_service import PredictionService
+from services.prediction_service import PredictionService
 
 class MultiDriverOptimizer:
     def __init__(self):

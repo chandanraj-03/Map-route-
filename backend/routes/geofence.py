@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import List
-from backend.database.config import get_db
+from database.config import get_db
 import datetime
 
 router = APIRouter()

@@ -1,5 +1,5 @@
 import datetime
-from backend.database.config import get_db
+from database.config import get_db
 
 class AuditLogger:
     @staticmethod

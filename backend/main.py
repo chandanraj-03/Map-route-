@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routes import predict, auth, data, drivers, stores, audit, analytics, geofence
-from backend.workers.reporting import reporting_worker
+from routes import predict, auth, data, drivers, stores, audit, analytics, geofence
+from workers.reporting import reporting_worker
 from contextlib import asynccontextmanager
 
 @asynccontextmanager

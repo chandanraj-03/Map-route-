@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from typing import List, Optional
-from backend.services.prediction_service import PredictionService
-from backend.services.assignment_engine import DriverAssignmentEngine
-from backend.services.multi_driver_optimizer import MultiDriverOptimizer
-from backend.database.config import get_db
+from services.prediction_service import PredictionService
+from services.assignment_engine import DriverAssignmentEngine
+from services.multi_driver_optimizer import MultiDriverOptimizer
+from database.config import get_db
 
 router = APIRouter()
 prediction_service = PredictionService()

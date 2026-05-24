@@ -1,6 +1,6 @@
 import asyncio
 import datetime
-from backend.database.config import db
+from database.config import db
 
 class ReportingWorker:
     def __init__(self, interval_seconds=86400): # Default: Daily

@@ -12,11 +12,11 @@ try:
     from xgb_model import XGBRoutePredictor
     from lstm_model import RouteSequenceLSTM
 except ImportError:
-    from backend.ml.dataset_loader import DatasetLoader
-    from backend.ml.cluster_model import StoreClusteringModel
-    from backend.ml.rf_model import RFRoutePredictor
-    from backend.ml.xgb_model import XGBRoutePredictor
-    from backend.ml.lstm_model import RouteSequenceLSTM
+    from ml.dataset_loader import DatasetLoader
+    from ml.cluster_model import StoreClusteringModel
+    from ml.rf_model import RFRoutePredictor
+    from ml.xgb_model import XGBRoutePredictor
+    from ml.lstm_model import RouteSequenceLSTM
 
 def train_pipeline():
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))

@@ -1,11 +1,11 @@
 import os
 import json
 import hashlib
-from backend.services.google_maps import GoogleMapsService
-from backend.ml.rf_model import RFRoutePredictor
-from backend.ml.xgb_model import XGBRoutePredictor
-from backend.ml.optimizer import HeuristicOptimizer
-from backend.utils.redis_client import RedisClient
+from services.google_maps import GoogleMapsService
+from ml.rf_model import RFRoutePredictor
+from ml.xgb_model import XGBRoutePredictor
+from ml.optimizer import HeuristicOptimizer
+from utils.redis_client import RedisClient
 
 import requests
 from datetime import datetime, timedelta

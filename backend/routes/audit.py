@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from typing import List, Optional
-from backend.database.config import get_db
+from database.config import get_db
 
 router = APIRouter()
 

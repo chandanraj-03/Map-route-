@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from backend.database.config import get_db
-from backend.ml.cluster_model import StoreClusteringModel
+from database.config import get_db
+from ml.cluster_model import StoreClusteringModel
 import os
 
 router = APIRouter()

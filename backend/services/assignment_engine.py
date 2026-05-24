@@ -1,6 +1,6 @@
 import numpy as np
 from datetime import datetime
-from backend.database.config import get_db
+from database.config import get_db
 
 class DriverAssignmentEngine:
     def __init__(self):
