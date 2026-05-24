@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { APIProvider } from '@vis.gl/react-google-maps';
 
 import Navbar from './components/Navigation/Navbar';
@@ -10,20 +10,13 @@ import DriverPerformance from './pages/DriverPerformance';
 import DriverManagement from './pages/DriverManagement';
 import StoreManagement from './pages/StoreManagement';
 import Analytics from './pages/Analytics';
-import Login from './pages/Login';
+
 import ModelMonitoring from './pages/ModelMonitoring';
 import AuditLogs from './pages/AuditLogs';
 import LandingPage from './pages/LandingPage';
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSy_mock_key_for_build';
 
-function ProtectedRoute({ children, authToken }) {
-  const location = useLocation();
-  if (!authToken) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-  return children;
-}
 
 function MainLayout({ children }) {
   return (
@@ -37,30 +30,22 @@ function MainLayout({ children }) {
 }
 
 function App() {
-  const [authToken, setAuthToken] = useState(localStorage.getItem('auth_token'));
-
-  useEffect(() => {
-    // Sync state with localstorage if it changes
-    setAuthToken(localStorage.getItem('auth_token'));
-  }, []);
 
   return (
     <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login setAuthToken={setAuthToken} />} />
-          
-          {/* Protected Routes wrapped in MainLayout */}
-          <Route path="/dashboard" element={<ProtectedRoute authToken={authToken}><MainLayout><Dashboard /></MainLayout></ProtectedRoute>} />
-          <Route path="/route" element={<ProtectedRoute authToken={authToken}><MainLayout><RoutePlanner /></MainLayout></ProtectedRoute>} />
-          <Route path="/weekly" element={<ProtectedRoute authToken={authToken}><MainLayout><WeeklyPlanner /></MainLayout></ProtectedRoute>} />
-          <Route path="/performance" element={<ProtectedRoute authToken={authToken}><MainLayout><DriverPerformance /></MainLayout></ProtectedRoute>} />
-          <Route path="/drivers" element={<ProtectedRoute authToken={authToken}><MainLayout><DriverManagement /></MainLayout></ProtectedRoute>} />
-          <Route path="/stores" element={<ProtectedRoute authToken={authToken}><MainLayout><StoreManagement /></MainLayout></ProtectedRoute>} />
-          <Route path="/analytics" element={<ProtectedRoute authToken={authToken}><MainLayout><Analytics /></MainLayout></ProtectedRoute>} />
-          <Route path="/models" element={<ProtectedRoute authToken={authToken}><MainLayout><ModelMonitoring /></MainLayout></ProtectedRoute>} />
-          <Route path="/audit" element={<ProtectedRoute authToken={authToken}><MainLayout><AuditLogs /></MainLayout></ProtectedRoute>} />
+          {/* Routes wrapped in MainLayout */}
+          <Route path="/dashboard" element={<MainLayout><Dashboard /></MainLayout>} />
+          <Route path="/route" element={<MainLayout><RoutePlanner /></MainLayout>} />
+          <Route path="/weekly" element={<MainLayout><WeeklyPlanner /></MainLayout>} />
+          <Route path="/performance" element={<MainLayout><DriverPerformance /></MainLayout>} />
+          <Route path="/drivers" element={<MainLayout><DriverManagement /></MainLayout>} />
+          <Route path="/stores" element={<MainLayout><StoreManagement /></MainLayout>} />
+          <Route path="/analytics" element={<MainLayout><Analytics /></MainLayout>} />
+          <Route path="/models" element={<MainLayout><ModelMonitoring /></MainLayout>} />
+          <Route path="/audit" element={<MainLayout><AuditLogs /></MainLayout>} />
         </Routes>
       </Router>
     </APIProvider>

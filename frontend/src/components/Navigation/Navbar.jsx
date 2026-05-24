@@ -50,12 +50,6 @@ function Navbar() {
             <div className="bg-emerald-400 h-2 rounded-full w-[45%]"></div>
           </div>
         </div>
-        <button 
-          onClick={() => { localStorage.removeItem('auth_token'); window.location.href='/login'; }}
-          className="text-slate-500 hover:text-red-500 transition-colors text-sm font-semibold"
-        >
-          Logout
-        </button>
       </div>
     </nav>
   );

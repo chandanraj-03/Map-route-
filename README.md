@@ -68,8 +68,6 @@ The **AI Route Optimization Platform** is a full-stack logistics intelligence sy
 ### Infrastructure
 - **[Docker & Docker Compose](https://docs.docker.com/compose/)** — Containerized local dev
 - **[Nginx](https://nginx.org/)** — Frontend reverse proxy
-- **[Railway](https://railway.app/)** — Backend deployment
-- **[Vercel](https://vercel.com/)** — Frontend deployment
 
 ---
 
@@ -166,7 +164,7 @@ docker-compose up --build
 
 ### Running Locally (Development)
 
-**Backend:**
+**1. Setup Environment**
 
 ```bash
 # Create and activate virtual environment
@@ -174,23 +172,21 @@ python -m venv .venv
 .venv\Scripts\activate        # Windows
 source .venv/bin/activate     # macOS/Linux
 
-# Install dependencies
+# Install backend dependencies
 pip install -r backend/requirements.txt
 
-# Start the FastAPI server
-uvicorn backend.main:app --reload --port 8000
+# Install frontend dependencies
+cd frontend
+npm install
+cd ..
 ```
 
-**Frontend:**
+**2. Start the Application**
+
+You can start both the frontend and backend simultaneously using the provided `launch.py` script:
 
 ```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Start the Vite dev server
-npm run dev
+python launch.py
 ```
 
 The frontend will be available at **http://localhost:5173** and will proxy API requests to the backend.
@@ -299,26 +295,6 @@ ai_route/
 ├── .gitignore
 └── README.md
 ```
-
----
-
-## ☁️ Deployment
-
-### Backend → Railway
-
-1. Connect your GitHub repository to [Railway](https://railway.app/).
-2. Set the root directory to `backend/`.
-3. Add all environment variables from your `.env` file in the Railway dashboard.
-4. Railway will auto-detect the `Dockerfile` and deploy.
-
-### Frontend → Vercel
-
-1. Connect your GitHub repository to [Vercel](https://vercel.com/).
-2. Set the root directory to `frontend/`.
-3. Add `VITE_GOOGLE_MAPS_API_KEY` as an environment variable.
-4. Vercel will auto-detect Vite and deploy.
-
-> 📝 The `frontend/vercel.json` contains routing rules for SPA support (client-side routing).
 
 ---
 

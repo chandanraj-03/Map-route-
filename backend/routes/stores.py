@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 from database.config import get_db
 from ml.cluster_model import StoreClusteringModel
+from services.google_maps import GoogleMapsService
 import os
 
 router = APIRouter()
@@ -106,3 +107,119 @@ async def delete_store(store_id: str, db=Depends(get_db)):
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Store not found")
     return {"message": "Store deleted successfully"}
+
+
+# ─────────────────────────────────────────────
+# Google Places API Integration
+# ─────────────────────────────────────────────
+gmaps = GoogleMapsService()
+
+
+@router.get("/{store_id}/enrich")
+async def enrich_store_with_places(store_id: str, db=Depends(get_db)):
+    """
+    Enriches a store record with live data from the Google Places API.
+    Uses Nearby Search to find matching businesses, then fetches Place Details
+    (name, rating, opening hours, business status).
+    Updates the store document in MongoDB with the enriched data.
+    """
+    store = await db.stores.find_one({"store_id": store_id})
+    if not store:
+        raise HTTPException(status_code=404, detail="Store not found")
+
+    lat = store.get("latitude", 23.02)
+    lng = store.get("longitude", 72.57)
+
+    # Step 1: Google Places Nearby Search
+    nearby_result = gmaps.get_nearby_places(lat, lng, radius=500, place_type="store")
+    nearby_places = nearby_result.get("results", [])
+
+    enriched_data = {
+        "google_places_enriched": True,
+        "nearby_store_count": len(nearby_places)
+    }
+
+    # Step 2: If we have a place_id, fetch detailed info
+    place_id = store.get("place_id")
+    if not place_id and nearby_places:
+        place_id = nearby_places[0].get("place_id")
+
+    if place_id:
+        details = gmaps.get_place_details(place_id)
+        if details.get("status") == "OK":
+            result = details.get("result", {})
+            enriched_data.update({
+                "google_place_id": place_id,
+                "google_name": result.get("name", store.get("store_name")),
+                "google_address": result.get("formatted_address", store.get("address")),
+                "google_rating": result.get("rating"),
+                "google_open_now": result.get("opening_hours", {}).get("open_now"),
+                "google_business_status": result.get("business_status")
+            })
+
+    # Update store in MongoDB
+    await db.stores.update_one(
+        {"store_id": store_id},
+        {"$set": enriched_data}
+    )
+
+    updated_store = await db.stores.find_one({"store_id": store_id})
+    return format_store(updated_store)
+
+
+class GeocodeRequest(BaseModel):
+    address: str
+
+
+@router.post("/geocode")
+async def geocode_address(request: GeocodeRequest):
+    """
+    Converts a human-readable address into latitude/longitude coordinates
+    using the Google Maps Geocoding API.
+    """
+    result = gmaps.geocode_address(request.address)
+    if not result:
+        raise HTTPException(status_code=400, detail="Could not geocode address")
+    return result
+
+
+@router.get("/{store_id}/nearby-places")
+async def get_nearby_places_for_store(
+    store_id: str,
+    radius: int = 1000,
+    place_type: str = "store",
+    db=Depends(get_db)
+):
+    """
+    Fetches nearby places (businesses, stores) around a given store's location
+    using the Google Places Nearby Search API.
+    Useful for understanding store density and competition in an area.
+    """
+    store = await db.stores.find_one({"store_id": store_id})
+    if not store:
+        raise HTTPException(status_code=404, detail="Store not found")
+
+    lat = store.get("latitude", 23.02)
+    lng = store.get("longitude", 72.57)
+
+    nearby = gmaps.get_nearby_places(lat, lng, radius=radius, place_type=place_type)
+
+    places = []
+    for p in nearby.get("results", []):
+        loc = p.get("geometry", {}).get("location", {})
+        places.append({
+            "name": p.get("name"),
+            "place_id": p.get("place_id"),
+            "lat": loc.get("lat"),
+            "lng": loc.get("lng"),
+            "rating": p.get("rating"),
+            "business_status": p.get("business_status")
+        })
+
+    return {
+        "store_id": store_id,
+        "center": {"lat": lat, "lng": lng},
+        "radius_m": radius,
+        "nearby_places": places,
+        "count": len(places)
+    }

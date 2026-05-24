@@ -26,16 +26,17 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/ai_route
+      - MONGO_URI=mongodb://mongodb:27017/ai_route
       - REDIS_URL=redis://redis:6379/0
       - ENVIRONMENT=development
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
+      - SECRET_KEY=${SECRET_KEY}
     depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_started
+      - mongodb
+      - redis
     volumes:
       - ./backend:/app
+      - ./data:/data
 
   frontend:
     build: ./frontend
@@ -45,7 +46,10 @@ services:
       - "80:80"
     depends_on:
       - backend
+    environment:
+      - VITE_GOOGLE_MAPS_API_KEY=${VITE_GOOGLE_MAPS_API_KEY}
+      - VITE_API_URL=http://localhost:8000
 
 volumes:
-  postgres_data:
+  mongodb_data:
   redis_data:

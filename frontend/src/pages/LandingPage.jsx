@@ -17,10 +17,10 @@ export default function LandingPage() {
             <span className="text-xl font-bold tracking-tight text-slate-800">Route Platform</span>
           </div>
           <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/login')} className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+            <button onClick={() => navigate('/dashboard')} className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
               Sign In
             </button>
-            <button onClick={() => navigate('/login')} className="text-sm font-semibold bg-slate-900 text-white px-5 py-2.5 rounded-full hover:bg-slate-800 transition-colors shadow-sm">
+            <button onClick={() => navigate('/dashboard')} className="text-sm font-semibold bg-slate-900 text-white px-5 py-2.5 rounded-full hover:bg-slate-800 transition-colors shadow-sm">
               Get Started
             </button>
           </div>
@@ -45,7 +45,7 @@ export default function LandingPage() {
             Harness the power of Random Forest, XGBoost, and K-Means clustering to optimize your logistics, cut fuel costs by up to 15%, and deliver faster with live traffic-aware routing.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button onClick={() => navigate('/login')} className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40">
+            <button onClick={() => navigate('/dashboard')} className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40">
               Start Optimizing
               <ArrowRight className="w-5 h-5" />
             </button>

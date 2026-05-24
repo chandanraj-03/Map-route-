@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import predict, auth, data, drivers, stores, audit, analytics, geofence
+from routes import predict, data, drivers, stores, audit, analytics, geofence
 from workers.reporting import reporting_worker
 from contextlib import asynccontextmanager
 
@@ -27,7 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router, prefix="/auth", tags=["authentication"])
+
 app.include_router(data.router, prefix="/data", tags=["data"])
 app.include_router(predict.router, prefix="/predict", tags=["prediction"])
 app.include_router(drivers.router, prefix="/drivers", tags=["drivers"])
