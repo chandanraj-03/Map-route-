@@ -1,0 +1,16 @@
+fastapi
+uvicorn==0.23.2
+motor==3.3.1
+pymongo==4.5.0
+pydantic==2.3.0
+pydantic-settings==2.0.3
+passlib==1.7.4
+bcrypt==4.2.0
+redis==5.0.0
+scikit-learn
+xgboost
+tensorflow
+pandas
+numpy
+python-dotenv
+joblib
