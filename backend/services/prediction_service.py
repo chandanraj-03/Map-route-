@@ -363,10 +363,14 @@ class PredictionService:
             region_num = REGION_ENCODING.get(region, 0)
             traffic_num = TRAFFIC_ENCODING.get(traffic_category, 1)
 
-            raw_features = np.array([[
+            raw_features = pd.DataFrame([[
                 driver_num, dow_num, weekend_flag, region_num, traffic_num,
                 hour, distance_km, stop_count, average_speed_kmph
-            ]], dtype=float)
+            ]], columns=[
+                'driver_id', 'day_of_week', 'weekend_flag', 'region', 
+                'traffic_category', 'hour', 'distance_km', 'stop_count', 
+                'average_speed_kmph'
+            ], dtype=float)
 
             if self._scaler:
                 scaled = self._scaler.transform(raw_features)

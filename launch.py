@@ -20,11 +20,12 @@ def main():
     else:
         python_exec = sys.executable
 
-    backend_cmd = [python_exec, "-m", "uvicorn", "backend.main:app", "--reload", "--port", "8000"]
+    backend_cmd = [python_exec, "-m", "uvicorn", "main:app", "--reload", "--port", "8000"]
+    backend_dir = os.path.join(base_dir, "backend")
     
     backend_process = subprocess.Popen(
         backend_cmd,
-        cwd=base_dir
+        cwd=backend_dir
     )
     
     # Start Frontend
